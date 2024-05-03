@@ -56,7 +56,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # Haversine formula for distance calculation between two coordinates
 
-@st.cache_data()
+@st.cache_resource
 def load_model() -> genai.GenerativeModel:
     """
     The function load_model() returns an instance of the genai.GenerativeModel class initialized with the model name
@@ -359,7 +359,7 @@ st.write("""
 
 files = st.file_uploader("Upload multiple images", type=["jpg", "png"], accept_multiple_files=True)
 
-@st.cache_data()
+@st.cache(allow_output_mutation=True)
 def import_and_predict(image_data, model):
     size = (224, 224)
     
