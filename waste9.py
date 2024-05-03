@@ -7,7 +7,6 @@ from PIL import Image, ImageOps
 import google.generativeai as genai
 import requests
 from requests.exceptions import ConnectionError, ReadTimeout
-from moviepy.editor import *
 from bs4 import BeautifulSoup
 import textwrap
 import time
