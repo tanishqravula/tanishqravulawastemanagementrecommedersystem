@@ -15,3 +15,4 @@ geocoder
 folium
 leafmap
 geopy
+extra-streamlit-components
