@@ -363,26 +363,28 @@ files = st.file_uploader("Upload multiple images", type=["jpg", "png"], accept_m
 def import_and_predict(image_data, model):
     size = (224, 224)
     
-    # Check if image_data is already a JpegImageFile object
-    if isinstance(image_data, Image.Image):
-        image = image_data
-    else:
+    try:
         # Convert the bytes-like object to a PIL Image object
-        image = Image.open(io.BytesIO(image_data))
+        image = Image.open(io.BytesIO(image_data)).convert("RGB")
+        
+        # Resize the image using ImageOps.fit()
+        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+        
+        # Convert the image to numpy array and normalize
+        img = np.array(image) / 255.0
+        
+        # Reshape the numpy array for model prediction
+        img_reshape = img[np.newaxis, ...]
+        
+        # Make prediction
+        prediction = model.predict(img_reshape)
+        
+        return prediction
     
-    # Resize the image using ImageOps.fit() if necessary
-    image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
-    
-    # Convert the image to numpy array
-    img = np.asarray(image)
-    
-    # Reshape the numpy array for model prediction
-    img_reshape = img[np.newaxis, ...]
-    
-    # Make prediction
-    prediction = model.predict(img_reshape)
-    
-    return prediction
+    except Exception as e:
+        st.error(f"Error occurred during prediction: {e}")
+        st.exception(e)  # Display detailed error traceback
+        return None
 if files is None:
     st.text("Please upload an image file")
 for file in files:
