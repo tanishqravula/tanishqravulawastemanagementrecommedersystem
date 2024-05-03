@@ -1,0 +1,17 @@
+streamlit
+tensorflow==2.15.1
+Pillow
+reportlab
+textwrap3
+requests
+beautifulsoup4
+pybase64
+pyttsx3
+pandas
+numpy
+google-generativeai
+yt-dlp
+geocoder
+folium
+leafmap
+geopy
