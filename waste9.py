@@ -13,6 +13,7 @@ from requests.exceptions import ConnectionError, ReadTimeout
 #from moviepy.editor import *
 from bs4 import BeautifulSoup
 #from summarizer import Summarizer
+import streamlit.components.v1 
 import textwrap
 import time
 import os
@@ -158,7 +159,7 @@ def display_waste_facilities(user_location):
 
         # Display the map using st.components
         #st.components.v1.html(map_html, height=700)
-        st.components.html(map_html, height=700)
+        st.components.v1.html(map_html, height=700)
 
         if facilities_within_400km:
             # Display facility names and distances in the frontend
