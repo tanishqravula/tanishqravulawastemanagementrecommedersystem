@@ -9,6 +9,7 @@ import requests
 from requests.exceptions import ConnectionError, ReadTimeout
 from bs4 import BeautifulSoup
 import textwrap
+import streamlit.components.v1
 import time
 import os
 import yt_dlp
