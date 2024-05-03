@@ -5,26 +5,19 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from PIL import Image, ImageOps
 import google.generativeai as genai
-import numpy as np
-#import openai
-#from duckduckgo_search import ddg_images
 import requests
 from requests.exceptions import ConnectionError, ReadTimeout
-#from moviepy.editor import *
+from moviepy.editor import *
 from bs4 import BeautifulSoup
-#from summarizer import Summarizer
-import streamlit.components.v1 
 import textwrap
 import time
 import os
 import yt_dlp
 import base64
-#from transformers import BartForConditionalGeneration, BartTokenizer
 import pyttsx3
 import geocoder
 import leafmap.foliumap as leafmap
 import folium
-import requests
 from math import radians, sin, cos, sqrt, atan2
 from geopy.geocoders import Nominatim
 import webbrowser
@@ -52,7 +45,6 @@ footer {visibility: hidden;}
 </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
 
 # Haversine formula for distance calculation between two coordinates
 
@@ -155,10 +147,6 @@ def display_waste_facilities(user_location):
         # Display the map using st.components
         with open("waste_management_map.html", "r") as f:
             map_html = f.read()
-        map_html = m.to_html()
-
-        # Display the map using st.components
-        #st.components.v1.html(map_html, height=700)
         st.components.v1.html(map_html, height=700)
 
         if facilities_within_400km:
@@ -359,32 +347,30 @@ st.write("""
 
 files = st.file_uploader("Upload multiple images", type=["jpg", "png"], accept_multiple_files=True)
 
-@st.cache(allow_output_mutation=True)
+
 def import_and_predict(image_data, model):
     size = (224, 224)
     
-    try:
+    # Check if image_data is already a JpegImageFile object
+    if isinstance(image_data, Image.Image):
+        image = image_data
+    else:
         # Convert the bytes-like object to a PIL Image object
-        image = Image.open(io.BytesIO(image_data)).convert("RGB")
-        
-        # Resize the image using ImageOps.fit()
-        image = ImageOps.fit(image, size, Image.ANTIALIAS)
-        
-        # Convert the image to numpy array and normalize
-        img = np.array(image) / 255.0
-        
-        # Reshape the numpy array for model prediction
-        img_reshape = img[np.newaxis, ...]
-        
-        # Make prediction
-        prediction = model.predict(img_reshape)
-        
-        return prediction
+        image = Image.open(io.BytesIO(image_data))
     
-    except Exception as e:
-        st.error(f"Error occurred during prediction: {e}")
-        st.exception(e)  # Display detailed error traceback
-        return None
+    # Resize the image using ImageOps.fit() if necessary
+    image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
+    
+    # Convert the image to numpy array
+    img = np.asarray(image)
+    
+    # Reshape the numpy array for model prediction
+    img_reshape = img[np.newaxis, ...]
+    
+    # Make prediction
+    prediction = model.predict(img_reshape)
+    
+    return prediction
 if files is None:
     st.text("Please upload an image file")
 for file in files:
