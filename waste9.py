@@ -343,7 +343,7 @@ with st.spinner('Model is being loaded..'):
     model = load_model()
 
 st.write("""
-         # DIY ideas for dataset of 12 classes
+         # DIY ideas for dataset of 12 classes(battery,biological,brown glass,white glass,green glass,cardboard,clothes,metal,paper,plastic,shoes,trash wastes)
          """
          )
 
