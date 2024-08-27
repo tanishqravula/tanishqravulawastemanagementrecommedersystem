@@ -733,9 +733,9 @@ for file in files:
         search_query="DIY ideas for reusing and recycling biological waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-       if not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y' 
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'  
                 video_url = youtube_search(search_query, api_key)
                 if video_url:
                     st.video(video_url)
