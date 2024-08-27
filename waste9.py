@@ -572,9 +572,9 @@ for file in files:
         search_query="DIY ideas for reusing and recycling cardboard waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-       if not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'  
                 video_url = youtube_search(search_query, api_key)
                 if video_url:
                     st.video(video_url)
@@ -587,6 +587,7 @@ for file in files:
                 st.session_state.video_generated = True
             except Exception as e:
                 st.error(f"An error occurred: {e}")        
+        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
