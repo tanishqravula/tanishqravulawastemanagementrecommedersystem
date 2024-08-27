@@ -22,6 +22,7 @@ from math import radians, sin, cos, sqrt, atan2
 from geopy.geocoders import Nominatim
 import webbrowser
 from numpy import clip
+import googleapiclient.discovery
 from googleapiclient.discovery import build
 import numpy as np
 import pandas as pd
@@ -117,6 +118,15 @@ def find_waste_facilities(user_location):
         waste_facilities = osm_data["elements"]
 
     return waste_facilities
+def youtube_search(query, api_key):
+    youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=api_key)
+    request = youtube.search().list(part='snippet', q=query, type='video', order='relevance', maxResults=1)
+    response = request.execute()
+    if 'items' in response and len(response['items']) > 0:
+        video_id = response['items'][0]['id']['videoId']
+        video_url = f'https://www.youtube.com/watch?v={video_id}'
+        return video_url
+    return None
 
 # Function to display waste management facilities and map
 def display_waste_facilities(user_location):
@@ -399,18 +409,17 @@ for file in files:
         search_query = "DIY ideas for reusing and recycling trash  management "
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-                    'format': 'best',
-                    'quiet': True,
-                }
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y' 
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
@@ -441,21 +450,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling plastic waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y' 
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -483,21 +492,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling paper waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -523,21 +532,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling metal waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'  
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -563,21 +572,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling cardboard waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+       if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -603,21 +612,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling shoes waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y' 
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -643,21 +652,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling clothes waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y' 
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -683,21 +692,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling battery waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -723,21 +732,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling biological waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+       if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y' 
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -764,21 +773,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling brown glass"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -804,21 +813,21 @@ for file in files:
         search_query="DIY ideas for reusing and recycling green waste"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred: {e}")        
         summary = generate_content("gemini-pro", content)
         pdf_filename = generate_pdf_summary(summary)
         st.success(f"PDF summary generated successfully. Check the {pdf_filename} file.")
@@ -844,17 +853,17 @@ for file in files:
         search_query="DIY ideas for reusing and recycling white glass"
         if "video_generated" not in st.session_state:
             st.session_state.video_generated = False
-        if search_query and not st.session_state.video_generated:
+        if not st.session_state.video_generated:
             try:
-                ydl_opts = {
-            'format': 'best',
-            'quiet': True,}
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    if search_query.isdigit():
-                        video_url = f'https://www.youtube.com/watch?v={search_query}'
-                    else:
-                        info_dict = ydl.extract_info(f"ytsearch:{search_query}", download=False)
-                        video_url = info_dict['entries'][0]['url']
+                api_key = 'AIzaSyB77KnDlzZgt1yT8BS2TbiewH2w_f1lh0Y'
+                video_url = youtube_search(search_query, api_key)
+                if video_url:
+                    st.video(video_url)
+                    st.session_state.video_generated = True
+                else:
+                    st.error("No videos found for the search query.")
+            except Exception as e:
+                st.error(f"An error occurred while fetching YouTube video: {e}")
                 st.video(video_url)
                 st.session_state.video_generated = True
             except Exception as e:
